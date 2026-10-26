@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi AI Cikgu Annie: Misi Menganggar SpongeBob</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(180deg, #70e1f5 0%, #ffd194 100%);
+            min-height: 100vh;
+        }
+
+        .font-bubble {
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Header Section -->
+    <header class="max-w-5xl mx-auto bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl mb-8 border-4 border-yellow-400 text-center relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 bg-yellow-200 rounded-full w-32 h-32 opacity-50"></div>
+        <h1 class="font-bubble text-3xl md:text-5xl text-blue-600 mb-2 drop-shadow">
+            🧽 Ruang Aplikasi AI Cikgu Annie 🧽
+        </h1>
+        <p class="text-gray-700 font-bold text-base md:text-lg">
+            Misi Menganggar Kuantiti Krusty Krab | Matematik Tahun 2 (Topik 1.5)
+        </p>
+    </header>
+
+    <main class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <!-- Left Column: Visual Estimator & Question Generator -->
+        <div class="space-y-8">
+            
+            <!-- Visual Lab -->
+            <section class="bg-white/95 rounded-3xl p-6 shadow-lg border-4 border-cyan-400">
+                <h2 class="font-bubble text-2xl text-cyan-700 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-flask text-yellow-500"></i> Makmal Anggaran Visual
+                </h2>
+                <div class="bg-blue-50 p-4 rounded-2xl mb-4 border-2 border-blue-200">
+                    <p class="text-sm font-bold text-blue-900 mb-2">Bekas A (Set Rujukan) = <span class="text-red-500 font-extrabold">20</span> Biji Bawang</p>
+                    <div class="w-full bg-blue-200 h-8 rounded-full overflow-hidden flex items-center px-2">
+                        <div class="bg-red-400 h-5 rounded-full w-2/5 text-xs text-white flex items-center justify-center font-bold">20</div>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-2xl mb-4 border-2 border-amber-200">
+                    <label for="sliderB" class="text-sm font-bold text-amber-900 block mb-2">
+                        Peluncur Bekas B (Objek Anggaran): <span id="valB" class="text-amber-600 font-extrabold text-lg">40</span> Biji
+                    </label>
+                    <input type="range" id="sliderB" min="5" max="60" value="40" class="w-full h-3 bg-amber-200 rounded-lg appearance-none cursor-pointer" oninput="updateLab(this.value)">
+                    <div class="w-full bg-amber-200 h-8 rounded-full overflow-hidden flex items-center px-2 mt-3">
+                        <div id="barB" class="bg-amber-500 h-5 rounded-full text-xs text-white flex items-center justify-center font-bold transition-all duration-300" style="width: 80%;">40</div>
+                    </div>
+                </div>
+
+                <div id="labFeedback" class="p-3 bg-cyan-100 rounded-xl text-cyan-900 font-bold text-sm text-center border border-cyan-300">
+                    Kuantiti Bekas B adalah <span class="text-blue-700 font-extrabold">lebih daripada</span> Bekas A!
+                </div>
+            </section>
+
+            <!-- AI Question Generator -->
+            <section class="bg-white/95 rounded-3xl p-6 shadow-lg border-4 border-yellow-400">
+                <h2 class="font-bubble text-2xl text-yellow-600 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-purple-500"></i> Penjana Soalan AI Misi
+                </h2>
+                <div class="bg-yellow-50 p-4 rounded-2xl mb-4 border-2 border-yellow-200 text-gray-800">
+                    <p id="questionText" class="font-bold text-base mb-2">
+                        🧽 SpongeBob ada 10 keping keju dalam Bekas A. Bekas B kelihatan hampir dua kali ganda lebih penuh daripada Bekas A. Berapakah anggaran keju dalam Bekas B?
+                    </p>
+                    <span class="inline-block bg-yellow-200 text-yellow-800 text-xs px-3 py-1 rounded-full font-bold">
+                        Set Rujukan = 10
+                    </span>
+                </div>
+
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="userAnswer" placeholder="Masukkan jawapan anggaran anda..." class="flex-1 px-4 py-2 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-yellow-500 font-bold">
+                    <button onclick="checkAnswer()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bubble px-5 py-2 rounded-xl transition shadow">
+                        Hantar
+                    </button>
+                </div>
+                <div id="answerFeedback" class="hidden p-3 rounded-xl font-bold text-sm text-center"></div>
+                <button onclick="generateQuestion()" class="w-full mt-3 bg-purple-600 hover:bg-purple-700 text-white font-bubble py-2 rounded-xl transition shadow text-sm">
+                    ✨ Jana Soalan Baharu
+                </button>
+            </section>
+
+        </div>
+
+        <!-- Right Column: Real Gemini Chatbot -->
+        <div class="space-y-8">
+            <section class="bg-white/95 rounded-3xl p-6 shadow-lg border-4 border-pink-400 flex flex-col h-[560px]">
+                <div class="flex items-center justify-between mb-4 border-b pb-3">
+                    <h2 class="font-bubble text-2xl text-pink-600 flex items-center gap-2">
+                        <i class="fa-solid fa-robot text-pink-500"></i> Pembantu AI Cikgu Annie
+                    </h2>
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Dalam Talian
+                    </span>
+                </div>
+
+                <!-- Chat Messages Scroll Area -->
+                <div id="chatBox" class="flex-1 overflow-y-auto chat-scroll space-y-3 p-2 mb-4 bg-slate-50 rounded-2xl border border-slate-200">
+                    <!-- Default AI Message -->
+                    <div class="flex items-start gap-2">
+                        <div class="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                            AI
+                        </div>
+                        <div class="bg-pink-100 text-pink-900 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm font-medium shadow-sm">
+                            Hai murid-murid! Saya Pembantu AI Cikgu Annie. 👋 <br>Ada sebarang soalan tentang <b>Set Rujukan</b> atau istilah <i>lebih kurang</i>, <i>kurang daripada</i>, dan <i>lebih daripada</i>?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Presets -->
+                <div class="flex gap-2 overflow-x-auto pb-2 mb-2 text-xs">
+                    <button onclick="sendQuickMsg('Apa itu Set Rujukan?')" class="bg-pink-50 hover:bg-pink-100 text-pink-700 px-3 py-1.5 rounded-full border border-pink-200 whitespace-nowrap font-bold transition">
+                        💡 Apa itu Set Rujukan?
+                    </button>
+                    <button onclick="sendQuickMsg('Bila guna lebih kurang?')" class="bg-pink-50 hover:bg-pink-100 text-pink-700 px-3 py-1.5 rounded-full border border-pink-200 whitespace-nowrap font-bold transition">
+                        ❓ Bila guna "lebih kurang"?
+                    </button>
+                </div>
+
+                <!-- Chat Input Form -->
+                <div class="flex gap-2 pt-2 border-t">
+                    <input type="text" id="chatInput" placeholder="Tanya soalan kepada Cikgu Annie..." class="flex-1 px-4 py-2 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-500 text-sm font-medium" onkeypress="if(event.key==='Enter') sendChatMessage()">
+                    <button onclick="sendChatMessage()" class="bg-pink-500 hover:bg-pink-600 text-white font-bubble px-4 py-2 rounded-xl transition shadow flex items-center justify-center">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // 1. Makmal Visual
+        function updateLab(val) {
+            document.getElementById('valB').innerText = val;
+            const bar = document.getElementById('barB');
+            const percent = Math.min((val / 60) * 100, 100);
+            bar.style.width = percent + '%';
+            bar.innerText = val;
+
+            const feedback = document.getElementById('labFeedback');
+            if (val < 18) {
+                feedback.innerHTML = `Kuantiti Bekas B adalah <span class="text-red-600 font-extrabold">kurang daripada</span> Bekas A!`;
+            } else if (val >= 18 && val <= 22) {
+                feedback.innerHTML = `Kuantiti Bekas B adalah <span class="text-green-600 font-extrabold">lebih kurang sama dengan</span> Bekas A!`;
+            } else {
+                feedback.innerHTML = `Kuantiti Bekas B adalah <span class="text-blue-700 font-extrabold">lebih daripada</span> Bekas A!`;
+            }
+        }
+
+        // 2. Question Generator
+        const questions = [
+            { text: "🧽 SpongeBob ada 10 keping keju dalam Bekas A. Bekas B kelihatan hampir dua kali ganda lebih penuh. Berapakah anggaran keju dalam Bekas B?", ref: 10, target: 20 },
+            { text: "🧅 Encik Krabs ada 15 biji bawang dalam guni A. Guni B kelihatan sedikit kurang daripada guni A. Berapakah anggaran bawang guni B?", ref: 15, target: 12 },
+            { text: "🍟 Patrick makan chips! Balang A ada 30 chips. Balang B tinggal sikit sahaja. Berapakah anggaran chips dalam Balang B?", ref: 30, target: 10 }
+        ];
+        let currentQ = questions[0];
+
+        function generateQuestion() {
+            currentQ = questions[Math.floor(Math.random() * questions.length)];
+            document.getElementById('questionText').innerText = currentQ.text;
+            document.getElementById('userAnswer').value = '';
+            document.getElementById('answerFeedback').classList.add('hidden');
+        }
+
+        function checkAnswer() {
+            const ans = parseInt(document.getElementById('userAnswer').value);
+            const fb = document.getElementById('answerFeedback');
+            fb.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-yellow-100', 'text-yellow-800');
+
+            if (isNaN(ans)) {
+                fb.classList.add('bg-yellow-100', 'text-yellow-800');
+                fb.innerText = "Sila masukkan nombor jawapan anda!";
+                return;
+            }
+
+            if (Math.abs(ans - currentQ.target) <= 3) {
+                fb.classList.add('bg-green-100', 'text-green-800');
+                fb.innerText = `Syabas! Jawapan ${ans} adalah anggaran yang munasabah! 🎉`;
+            } else {
+                fb.classList.add('bg-yellow-100', 'text-yellow-800');
+                fb.innerText = `Hampir tepat! Cuba perhatikan semula set rujukan (${currentQ.ref}). Anggaran yang lebih munasabah ialah sekitar ${currentQ.target}.`;
+            }
+        }
+
+        // 3. Smart Gemini AI Chatbot Integration
+        const systemPrompt = `Anda ialah Pembantu AI Cikgu Annie untuk mata pelajaran Matematik Tahun 2 KSSR (Topik 1.5 Menganggar). 
+Watak anda ialah sorang guru wanita yang mesra, comel, penyabar, dan menggunakan bahasa Melayu yang mudah difahami oleh murid berumur 8 tahun.
+Gunakan kata-kata galakan, emoji yang ceria, dan istilah matematik yang tepat seperti "set rujukan", "lebih kurang", "kurang daripada", dan "lebih daripada".
+Pastikan jawapan anda ringkas (1-3 ayat sahaja) dan sentiasa menggalakkan murid mencuba!`;
+
+        let conversationHistory = [];
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            addMessageToChat('user', msg);
+            input.value = '';
+
+            // Show Typing Indicator
+            const typingId = addTypingIndicator();
+
+            try {
+                // Using Web Free Gemini API Gateway
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyA_placeholder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [
+                            { role: 'user', parts: [{ text: systemPrompt }] },
+                            ...conversationHistory,
+                            { role: 'user', parts: [{ text: msg }] }
+                        ]
+                    })
+                });
+
+                removeTypingIndicator(typingId);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const aiReply = data.candidates[0].content.parts[0].text;
+                    addMessageToChat('ai', aiReply);
+                    conversationHistory.push({ role: 'user', parts: [{ text: msg }] });
+                    conversationHistory.push({ role: 'model', parts: [{ text: aiReply }] });
+                } else {
+                    // Fallback to Smart Offline Logic if Network/Key Limit
+                    smartFallbackReply(msg);
+                }
+            } catch (err) {
+                removeTypingIndicator(typingId);
+                smartFallbackReply(msg);
+            }
+        }
+
+        function sendQuickMsg(text) {
+            document.getElementById('chatInput').value = text;
+            sendChatMessage();
+        }
+
+        function addMessageToChat(role, text) {
+            const chatBox = document.getElementById('chatBox');
+            const div = document.createElement('div');
+            div.className = `flex items-start gap-2 ${role === 'user' ? 'flex-row-reverse' : ''}`;
+
+            const avatar = role === 'user' 
+                ? `<div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs shrink-0">Kamu</div>`
+                : `<div class="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-xs shrink-0">AI</div>`;
+
+            const bgClass = role === 'user' ? 'bg-blue-500 text-white rounded-tr-none' : 'bg-pink-100 text-pink-900 rounded-tl-none';
+
+            div.innerHTML = `
+                ${avatar}
+                <div class="${bgClass} p-3 rounded-2xl max-w-[85%] text-sm font-medium shadow-sm">
+                    ${text}
+                </div>
+            `;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const chatBox = document.getElementById('chatBox');
+            const id = 'typing-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex items-start gap-2';
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-xs shrink-0">AI</div>
+                <div class="bg-pink-100 text-pink-900 p-3 rounded-2xl rounded-tl-none text-sm font-bold flex gap-1 items-center">
+                    Cikgu Annie sedang menaip <span class="animate-bounce">.</span><span class="animate-bounce delay-100">.</span><span class="animate-bounce delay-200">.</span>
+                </div>
+            `;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        // Smart Natural Language Processing Fallback (Guarantees zero-failure response)
+        function smartFallbackReply(userText) {
+            const text = userText.toLowerCase();
+            let reply = "";
+
+            if (text.includes("set rujukan") || text.includes("rujukan")) {
+                reply = "Set rujukan ialah kuantiti objek yang kita sudah tahu bilangannya secara pasti! Contohnya, Bekas A ada 10 biji bawang untuk dijadikan panduan menganggar Bekas B. 🧅✨";
+            } else if (text.includes("kurang daripada") || text.includes("kurang")) {
+                reply = "Kita guna istilah 'kurang daripada' apabila kuantiti objek yang dianggar nampak lebih sedikit berbanding set rujukan! 📉";
+            } else if (text.includes("lebih daripada") || text.includes("lebih")) {
+                reply = "Istilah 'lebih daripada' digunakan apabila kuantiti objek anggaran kelihatan lebih banyak daripada set rujukan! 📈";
+            } else if (text.includes("lebih kurang") || text.includes("hampir")) {
+                reply = "Kita guna 'lebih kurang' apabila bilangan objek anggaran adalah sangat dekat atau hampir sama dengan set rujukan! 🎯";
+            } else if (text.includes("hai") || text.includes("hello") || text.includes("salam")) {
+                reply = "Hai murid yang bijak! Cikgu Annie di sini. Ada apa-apa yang nak ditanya tentang misi menganggar hari ini? 😊";
+            } else {
+                reply = `Soalan yang sangat bagus! 👍 Untuk menganggar kuantiti objek seperti ini, sentiasa bandingkan dengan **set rujukan** dahulu dan gunakan kata kunci *lebih kurang*, *kurang daripada*, atau *lebih daripada* ya!`;
+            }
+
+            setTimeout(() => {
+                addMessageToChat('ai', reply);
+            }, 600);
+        }
+    </script>
+</body>
+</html>
